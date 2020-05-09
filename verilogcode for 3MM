@@ -1,4 +1,4 @@
-module gemm(A,B,C,Cout,clk);
+module 3mm(A,B,C,Cout,clk);
    
     input [31:0] A;
     input [31:0] B;
@@ -36,7 +36,7 @@ this is testbench code
 
 
 
-module gemm_tb();
+module 3mm_tb();
     reg [31:0] A;
     reg [31:0] B;
     reg [31:0] C;
