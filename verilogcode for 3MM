@@ -1,0 +1,64 @@
+module gemm(A,B,C,Cout,clk);
+   
+    input [31:0] A;
+    input [31:0] B;
+    input [31:0] C;
+    output [31:0] Cout;
+    input clk;
+    reg [31:0] Cout;
+    reg [7:0] A1 [0:1][0:1];
+    reg [7:0] B1 [0:1][0:1];
+    reg [7:0] C1 [0:1][0:1];
+    reg [7:0] Cout1 [0:1][0:1]; 
+    integer i,j,k;
+
+    always@ (*)
+    begin
+ 
+        {A1[0][0],A1[0][1],A1[1][0],A1[1][1]} = A;
+        {B1[0][0],B1[0][1],B1[1][0],B1[1][1]} = B;
+        {C1[0][0],C1[0][1],C1[1][0],C1[1][1]} = C;
+        i = 0;
+        j = 0;
+        k = 0;
+        {Cout1[0][0],Cout1[0][1],Cout1[1][0],Cout1[1][1]} = 32'd0; 
+        //Matrix multiplication
+        for(i=0;i < 2;i=i+1)
+            for(j=0;j < 2;j=j+1)
+                for(k=0;k < 2;k=k+1)
+                    Cout1[i][j] = (A1[i][j] * B1[j][k] * C1[i][k]);
+                  
+        Cout = {Cout1[0][0],Cout1[0][1],Cout1[1][0],Cout1[1][1]};            
+    end 
+endmodule
+
+this is testbench code
+
+
+
+module gemm_tb();
+    reg [31:0] A;
+    reg [31:0] B;
+    reg [31:0] C;
+    //reg [31:0] Temp;
+    reg clk;
+    wire [31:0] Cout;
+
+    gemm uut (
+        .A(A), 
+        .B(B), 
+        .C(C),
+        .clk(clk),
+        .Cout(Cout)
+    );
+
+    initial
+     begin
+       
+        A = 0;  B = 0; C = 0; #100;
+        A = {8'd1,8'd2,8'd3,8'd4};
+        B = {8'd5,8'd6,8'd7,8'd8};
+        C = {8'd5,8'd6,8'd7,8'd8};
+                 
+    end
+endmodule
